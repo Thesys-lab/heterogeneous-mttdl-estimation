@@ -1,0 +1,25 @@
+[project]
+name = "heterogeneous-mttdl-estimation"
+version = "0.1.0"
+description = "Code for calculating and estimating the MTTDL (mean time to data loss) of a stripe over devices with heterogeneous failure rates."
+authors = [
+    "Francisco Maturana <francisco.matu@gmail.com>"
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+requires-python = ">=3.6"
+homepage = "https://github.com/Thesys-lab/heterogeneous-mttdl-estimation"
+repository = "https://github.com/Thesys-lab/heterogeneous-mttdl-estimation"
+documentation = "https://github.com/Thesys-lab/heterogeneous-mttdl-estimation"
+
+dependencies = [
+    "numpy>=1.19.5",
+    "scipy>=1.5.3",
+]
+
+[build-system]
+requires = [
+  "setuptools >= 40.9.0",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
