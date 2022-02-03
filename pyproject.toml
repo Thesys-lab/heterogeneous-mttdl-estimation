@@ -1,4 +1,4 @@
-[project]
+[tool.poetry]
 name = "heterogeneous-mttdl-estimation"
 version = "0.1.0"
 description = "Code for calculating and estimating the MTTDL (mean time to data loss) of a stripe over devices with heterogeneous failure rates."
@@ -24,5 +24,3 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-[tool.poetry]
-name = "heterogeneous_mttdl"
