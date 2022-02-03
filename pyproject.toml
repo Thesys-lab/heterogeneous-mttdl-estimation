@@ -7,6 +7,9 @@ authors = [
 ]
 license = "MIT"
 readme = "README.md"
+packages = [
+  { include = "src" }
+]
 homepage = "https://github.com/Thesys-lab/heterogeneous-mttdl-estimation"
 repository = "https://github.com/Thesys-lab/heterogeneous-mttdl-estimation"
 documentation = "https://github.com/Thesys-lab/heterogeneous-mttdl-estimation"
