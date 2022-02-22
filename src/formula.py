@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+from typing import Tuple
 import numpy as np
 
 from scipy.special import binom
+from scipy.optimize import root_scalar
 
 
 def poisson_binomial_pmf(probabilities: np.ndarray) -> np.ndarray:
@@ -63,6 +65,32 @@ def mttdl_formula(
     return 1 / data_loss_rate
 
 
+def critical_afr(
+    n: int,
+    k: int,
+    mttdl_threshold: float,
+    repair_rate: float,
+    bracket: Tuple[float, float],
+) -> float:
+    """Find the highest failure rate that can be tolerated by a given scheme.
+
+    Args:
+        n (int): Length of MDS code.
+        k (int): Dimension of MDS code.
+        mttdl_threshold (float): minimum MTTDL threshold.
+        repair_rate (float): Repair rate of disks.
+        bracket (Tuple[float, float]): Failure rate bracket (must contain solution).
+
+    Returns:
+        float: Failure rate.
+    """
+    root_fun = (
+        lambda afr: homogeneous_mttdl_formula(n, k, afr, repair_rate) - mttdl_threshold
+    )
+    sol = root_scalar(root_fun, bracket=bracket)
+    return sol.root
+
+
 def _test_homogeneous_mttdl_formula():
     """Test that homogeneous and heterogenous formula give similar results."""
     n = 14
@@ -97,7 +125,26 @@ def _test_mttdl_formula():
     assert abs(np.log(mttdl) - np.log(7e25)) < 1
 
 
+def _test_critical_afr():
+    """Test that critical AFR is found correctly."""
+    n = 14
+    k = 10
+    repair_rate = 4.0
+    min_afr = 2 / (365 * 24 * 100)
+    max_afr = 15 / (365 * 24 * 100)
+    mttdl_threshold = homogeneous_mttdl_formula(n, k, max_afr, repair_rate)
+    bracket = (min_afr, max_afr)
+    afr = critical_afr(n, k, mttdl_threshold, repair_rate, bracket)
+    print(f"afr={max_afr}")
+    print(
+        f"critical_afr(n={n}, k={k}, mttdl_threshold={mttdl_threshold}, "
+        f"repair rate={repair_rate}, bracket={bracket}): {afr}"
+    )
+    assert np.isclose(afr, max_afr, rtol=1e-3)
+
+
 if __name__ == "__main__":
     # Run tests.
     _test_mttdl_formula()
     _test_homogeneous_mttdl_formula()
+    _test_critical_afr()
